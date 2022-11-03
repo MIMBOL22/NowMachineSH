@@ -4,7 +4,10 @@ if [ "$EUID" -ne 0 ]
     else echo "Привет, устанавливаем веб сервер"
 fi
 add-apt-repository -y ppa:phpmyadmin/ppa
-apt install -y mysql-server mysql-client nginx php7.4 php7.4-fpm php7.4-json php7.4-mysql php7.4-odbc phpmyadmin 
+apt install -y wget mysql-server mysql-client nginx php7.4 php7.4-fpm php7.4-json php7.4-mysql php7.4-odbc phpmyadmin 
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.24-1_all.deb
+dpkg -i mysql-apt-config_0.8.24-1_all.deb
+rm mysql-apt-config_0.8.24-1_all.deb
 printf "server {\n        listen 80 default_server;\n        root /var/www/html;\n        index index.php index.html;\n        location / {\n                try_files $uri $uri/ =404;\n        }\n        location ~ \.php$ {\n                include snippets/fastcgi-php.conf;\n                fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;\n        }\n}" >> /etc/nginx/sites-enabled/default
 systemctl restart nginx
 rm /var/www/html/index.html
