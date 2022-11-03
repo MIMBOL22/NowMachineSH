@@ -1,4 +1,3 @@
-
 if [ "$EUID" -ne 0 ] 
     then sudo bash ./main.sh
     exit
@@ -12,7 +11,7 @@ rm /var/www/html/index.html
 printf "<?php \necho 'Hello, World\!';" >> /var/www/html/index.php
 read -p "Имя пользователя для MySQL суперпользователя: " mysql_user
 read -s -p "Пароль для MySQL суперпользователя: " mysql_pass
-echo "\n"
 read -p "IP доступа для MySQL суперпользователя: [localhost]" mysql_host
-mysql -e "CREATE USER '${mysql_user}'@'${mysql_host:-localhost}' IDENTIFIED WITH mysql_native_password BY '${mysql_pass}';"
+mysql -e "CREATE USER '${mysql_user}'@'${mysql_host:-localhost}' IDENTIFIED WITH mysql_native_password BY '${mysql_pass}';GRANT ALL PRIVILEGES ON * . * TO '${mysql_user}'@'${mysql_host:-localhost}';"
+ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
 echo "Готово ;)"
